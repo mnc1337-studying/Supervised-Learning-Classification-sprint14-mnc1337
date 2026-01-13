@@ -11,13 +11,18 @@ def read_csv(file_path):
     Reads a CSV file and returns its content as a pandas DataFrame.
 
     Parameters:
-    file_path (str): Path to the CSV file.
+        file_path (str): Path to the CSV file.
 
     Returns:
     pd.DataFrame: Loaded data.
     """
+    try:
+        df = pd.read_csv(file_path)
+    except FileNotFoundError:
+        print(f"File {file_path} not found")
+        df = pd.DataFrame()
 
-    return data
+    return df
 
 
 def train_decision_tree(X, y, max_depth=None):
@@ -25,14 +30,15 @@ def train_decision_tree(X, y, max_depth=None):
     Trains a Decision Tree Classifier.
 
     Parameters:
-    X (np.array): Feature matrix.
-    y (np.array): Target vector.
-    max_depth (int): Maximum depth of the tree. Default is None.
+        X (np.array): Feature matrix.
+        y (np.array): Target vector.
+        max_depth (int): Maximum depth of the tree. Default is None.
 
     Returns:
     DecisionTreeClassifier: Trained Decision Tree model.
     """
-
+    model = DecisionTreeClassifier(max_depth=max_depth, random_state=42)
+    model.fit(X, y)
     return model
 
 
@@ -47,7 +53,10 @@ def evaluate_model(y_true, y_pred):
     Returns:
     dict: Evaluation metrics (accuracy, precision, recall, F1-score).
     """
-
+    accuracy = accuracy_score(y_true, y_pred)
+    precision = precision_score(y_true, y_pred)
+    recall = recall_score(y_true, y_pred)
+    f1 = f1_score(y_true, y_pred)
     return {"Accuracy": accuracy, "Precision": precision, "Recall": recall, "F1-Score": f1}
 
 

@@ -11,13 +11,18 @@ def read_csv(file_path):
     Reads a CSV file and returns its content as a pandas DataFrame.
 
     Parameters:
-    file_path (str): Path to the CSV file.
+        file_path (str): Path to the CSV file.
 
     Returns:
-    pd.DataFrame: Loaded data.
+        pd.DataFrame: Loaded data.
     """
+    try:
+        df = pd.read_csv(file_path)
+    except FileNotFoundError:
+        print(f"File {file_path} not found")
+        df = pd.DataFrame()
 
-    return data
+    return df
 
 
 def train_logistic_regression(X, y):
@@ -25,13 +30,14 @@ def train_logistic_regression(X, y):
     Trains a logistic regression model.
 
     Parameters:
-    X (np.array): Feature matrix.
-    y (np.array): Target vector.
+        X (np.array): Feature matrix.
+        y (np.array): Target vector.
 
     Returns:
-    LogisticRegression: Trained logistic regression model.
+        LogisticRegression: Trained logistic regression model.
     """
-
+    model = LogisticRegression()
+    model.fit(X, y)
     return model
 
 
@@ -40,13 +46,16 @@ def evaluate_model(y_true, y_pred):
     Evaluates the model using various metrics.
 
     Parameters:
-    y_true (np.array): True target values.
-    y_pred (np.array): Predicted target values.
+        y_true (np.array): True target values.
+        y_pred (np.array): Predicted target values.
 
     Returns:
-    dict: Evaluation metrics (accuracy, precision, recall, F1-score).
+        dict: Evaluation metrics (accuracy, precision, recall, F1-score).
     """
-
+    accuracy = accuracy_score(y_true, y_pred)
+    precision = precision_score(y_true, y_pred)
+    recall = recall_score(y_true, y_pred)
+    f1 = f1_score(y_true, y_pred)
     return {"Accuracy": accuracy, "Precision": precision, "Recall": recall, "F1-Score": f1}
 
 
@@ -55,9 +64,9 @@ def visualize_decision_boundary(X, y, model):
     Visualizes the data points and decision boundary.
 
     Parameters:
-    X (np.array): Feature matrix.
-    y (np.array): Target vector.
-    model (LogisticRegression): Trained logistic regression model.
+        X (np.array): Feature matrix.
+        y (np.array): Target vector.
+        model (LogisticRegression): Trained logistic regression model.
     """
     x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
     y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
